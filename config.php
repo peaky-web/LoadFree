@@ -1,10 +1,11 @@
 <?php
 
-$host = 'switchyard.proxy.rlwy.net';
-$db   = 'YOUR_RAILWAY_DATABASE';
-$user = 'YOUR_RAILWAY_USERNAME';
-$pass = 'YOUR_RAILWAY_PASSWORD';
-$port = 15181;
+$host = getenv('MYSQLHOST');
+$db   = getenv('MYSQLDATABASE');
+$user = getenv('MYSQLUSER');
+$pass = getenv('MYSQLPASSWORD');
+$port = getenv('MYSQLPORT') ?: '3306';
+
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
