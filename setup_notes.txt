@@ -1,0 +1,1 @@
+Import database.sql into MySQL, then edit config.php if your MySQL credentials differ. Open http://localhost/LoadFree/ after starting Apache and MySQL.
