@@ -12,7 +12,15 @@ COPY . /var/www/html/
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
-# Make sure Apache starts with ONLY mpm_prefork
-CMD ["bash", "-c", "a2dismod mpm_event mpm_worker || true; rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.*; a2enmod mpm_prefork; apache2ctl -t; exec apache2-foreground"]
+# Make Apache use Railway's PORT
+CMD ["bash", "-c", "\
+PORT=${PORT:-80}; \
+a2dismod mpm_event mpm_worker || true; \
+rm -f /etc/apache2/mods-enabled/mpm_event.* /etc/apache2/mods-enabled/mpm_worker.*; \
+a2enmod mpm_prefork; \
+sed -i -E \"s/^Listen [0-9]+/Listen ${PORT}/\" /etc/apache2/ports.conf; \
+sed -i -E \"s/<VirtualHost \\*:[0-9]+>/<VirtualHost *:${PORT}>/\" /etc/apache2/sites-available/000-default.conf; \
+apache2ctl -t; \
+exec apache2-foreground"]
 
 EXPOSE 80
